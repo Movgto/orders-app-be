@@ -20,7 +20,8 @@ from flask_jwt_extended import (
     create_refresh_token,
     jwt_required,
     get_jwt_identity,
-    get_jwt    
+    get_jwt,
+    get_current_user
 )
 import time
 
@@ -46,6 +47,15 @@ def signup():
 
     except ValidationError as err:
         return {"error": err.messages}, 400
+    
+@auth_routes_bp.post('/who-am-i')
+@jwt_required()
+def who_am_i():
+    user_data: User = get_current_user()
+    
+    return {
+        "user_data": repr(user_data)
+    }, 200
 
 @auth_routes_bp.post('/login')
 def login():
@@ -102,7 +112,7 @@ def signup_employee():
 
         return {'message': f'The employee was signed up successfully for the user {user.first_name}!'}, 200       
     except ValidationError as err:
-        return {'errors': err.messages}
+        return {'errors': err.messages}, 400
 
 @auth_routes_bp.post('/login-employee')
 def login_employee():
