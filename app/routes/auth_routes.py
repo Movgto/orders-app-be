@@ -54,7 +54,7 @@ def who_am_i():
     user_data: User = get_current_user()
     
     return {
-        "user_data": repr(user_data)
+        "user_data": user_data
     }, 200
 
 @auth_routes_bp.post('/login')
@@ -121,7 +121,7 @@ def login_employee():
 
         user: User = User.query.filter_by(email=data['admin_email']).first_or_404()
 
-        employee: Employee = Employee.query.filter_by(email=data['email']).first_or_404()        
+        employee: Employee = Employee.query.filter_by(email=data['email']).first_or_404()
 
         if employee.user_id != user.id:
             return {"error": "Incorrect admin email"}, 401
@@ -139,7 +139,8 @@ def login_employee():
                 'first_name': employee.first_name,
                 'last_name': employee.last_name,
                 'email': employee.email
-            }
+            },
+            'admin_id': user.id
         }
 
     except ValidationError as err:

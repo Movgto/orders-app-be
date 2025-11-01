@@ -1,6 +1,6 @@
 from flask_jwt_extended import JWTManager
 from app.models.user import User
-from flask import logging
+from typing import cast
 
 jwt = JWTManager()
 
@@ -17,7 +17,11 @@ def user_lookup_callback(_, jwt_data):
     print(f'User lookup callback - user_id: {user_id}')
     print(f'User lookup callback - jwt_data: {jwt_data}')
 
-    user = User.query.filter_by(id=user_id).one_or_none()
+    user = cast(User, User.query.filter_by(id=user_id).one_or_none())
     
-    return user
+    return {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email
+    } if user else None
 
