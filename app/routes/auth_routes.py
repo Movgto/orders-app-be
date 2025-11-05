@@ -80,7 +80,8 @@ def login():
             "user": {
                 "email": user_found.email,
                 "first_name": user_found.first_name,
-                "last_name": user_found.last_name
+                "last_name": user_found.last_name,
+                "role": "admin"
             }        
         }, 200
     except ValidationError as err:
@@ -161,6 +162,8 @@ def logout():
     '''Revokes the current access token'''
 
     jti = get_jwt()['jti']
+
+    print(f'Token: {jti}')
 
     token_blocklist.add(jti)
     return {"message": "Successfully logged out"}, 200

@@ -9,13 +9,14 @@ from app.auth import jwt
 
 def create_app(config_object: Config = Config()):
     app = Flask(__name__)
-    cors = CORS()
     app.config.from_object(config_object)
 
     db.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app, origins=app.config.get(
-        'CORS_ORIGINS', 'localhost:5000'))
+    
+    # Initialize CORS with the origins from config
+    cors_origins = app.config.get('CORS_ORIGINS', ['http://localhost:8081'])
+    CORS(app, origins=cors_origins, supports_credentials=True)
 
     # Ensure models are imported so SQLAlchemy metadata is populated.
     # This is required for Alembic/Flask-Migrate autogenerate to detect
