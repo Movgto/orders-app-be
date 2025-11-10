@@ -32,8 +32,8 @@ def signup():
     body = request.get_json()
 
     try:
+        print(f'Body: {body}')    
         result = cast(UserSignupData, user_schema.load(body))
-        print(f'Body: {body}')        
                 
         user = User(
             first_name=result['first_name'],
@@ -43,9 +43,11 @@ def signup():
         )
         db.session.add(user)
         db.session.commit()
+
         return 'User created successfully!', 200
 
     except ValidationError as err:
+        print(f'Error while signup: {err.messages}')
         return {"error": err.messages}, 400
     
 @auth_routes_bp.post('/who-am-i')
