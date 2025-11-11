@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.security import verify_password, hash_password, needs_rehash
 if TYPE_CHECKING:
     from app.models.employee import Employee
+    from app.models.business import Business
 
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -17,6 +18,13 @@ class User(db.Model):
     # One-to-many: a User can have multiple Employee records
     employees: Mapped[list["Employee"]] = relationship(
         'Employee',
+        back_populates='user',
+        cascade='all, delete-orphan',
+        lazy='selectin'
+    )
+    
+    businesses: Mapped[list['Business']] = relationship(
+        'Business',
         back_populates='user',
         cascade='all, delete-orphan',
         lazy='selectin'

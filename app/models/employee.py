@@ -36,7 +36,7 @@ class Employee(db.Model):
         'Permission',
         secondary=employee_permissions,
         back_populates='employees',
-        collection_class=set        
+        collection_class=set     
     )
 
     def __init__(self, first_name: str, last_name: str, password: str, email: str):

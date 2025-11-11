@@ -10,5 +10,9 @@ import importlib
 # Import modules for their side-effects (registering models/metadata).
 importlib.import_module('app.models.user')
 importlib.import_module('app.models.employee')
+importlib.import_module('app.models.business')
+importlib.import_module('app.models.order')
+importlib.import_module('app.models.product')
+importlib.import_module('app.models.table')
 
 __all__ = []
