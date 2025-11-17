@@ -6,9 +6,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.table import Table
+    from app.models.product import Product
 
 # Import User outside TYPE_CHECKING since we use it at runtime in __init__
-from app.models.user import User    
+from app.models.user import User
 
 class Business(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -18,6 +19,13 @@ class Business(db.Model):
     
     tables: Mapped[list['Table']] = relationship(
         'Table',
+        back_populates='business',
+        cascade='all, delete-orphan',
+        lazy='selectin'
+    )
+
+    products: Mapped[list['Product']] = relationship(
+        'Product',
         back_populates='business',
         cascade='all, delete-orphan',
         lazy='selectin'

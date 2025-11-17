@@ -5,7 +5,7 @@ from typing import cast
 from app.models.user import User
 from app.models.business import Business
 from app.db import db
-from flask_jwt_extended import jwt_required, get_current_user, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 business_bp = Blueprint('business_routes', __name__, url_prefix='/business')
@@ -46,3 +46,16 @@ def create_business():
         return {
             'error': f'Unexpected error: {str(err)}'
         }, 500
+
+@business_bp.get('')
+def get_businesses():
+    try:
+        user_id = get_jwt_identity()
+        user = cast(User, User.query.get_or_404(user_id))
+
+        print(f'Businesses: {user.businesses}')
+        return [{'id': b.id, 'name': b.name} for b in user.businesses], 200
+    except Exception as err:
+        return {
+            "error": str(err)
+        }, 200

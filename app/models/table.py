@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 class Table(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     number: Mapped[int] = mapped_column(nullable=False)
+
     business_id: Mapped[int] = mapped_column(ForeignKey('business.id', ondelete='CASCADE'), nullable=False)
     business: Mapped['Business']= relationship(
         'Business',
@@ -23,3 +24,8 @@ class Table(db.Model):
         cascade='all, delete-orphan',
         lazy='selectin'
     )
+
+    def __init__(self, number: int, business_id:int):
+        self.number = number
+        self.business_id = business_id
+        
