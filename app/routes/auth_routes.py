@@ -50,7 +50,7 @@ def signup():
         print(f'Error while signup: {err.messages}')
         return {"error": err.messages}, 400
     
-@auth_routes_bp.post('/who-am-i')
+@auth_routes_bp.get('/who-am-i')
 @jwt_required()
 def who_am_i():
     user_data: User = get_current_user()
